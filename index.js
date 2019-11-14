@@ -1,12 +1,12 @@
 const express = require("express");
-
+const bcrypt = require("bcryptjs");
 const users = [
     {id:123, email:"lars@lars.se",password: "$2a$12$3uZBEd4D9BBUop8Orvv5e.tWuJ6006pefdj3BVkz93PhObUyTON82"},
     {id:124, email:"fredrik@fredrik.se",password: "$2a$12$SmJPS/4mMMw0ghttXh92qeV9V53cYkA8geA1W9hwvw6pb.JO841z2"}
 ];
 
 const app = express();
-
+//Kommer på provet!
 app.use(express.urlencoded({extended:false}));
 
 app.get("/",function(req,res){
@@ -20,7 +20,35 @@ app.get("/login",function(req,res){
 app.post("/login",function(req,res){
 
 
-    res.send(req.body);
+    
+
+    let user = users.filter(function(u){
+        if(req.body.email == u.email)
+        {return true;}
+    });
+
+    if(user.length===1)
+
+    {  
+        const password = req.body.password;
+        const hash = user[0].password
+         bcrypt.compare(password,hash,function(err,success){
+
+
+        if(success)
+        {
+            res.send("login success");
+        }
+        else
+        {
+            res.send("wrong password");
+        }
+    });       
+    }
+    else{
+        res.send("no such user...")
+    }
+
 
     /**
      * 1. hämta data som klienten skickat ( Repetition )
