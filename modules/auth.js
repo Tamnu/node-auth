@@ -13,7 +13,7 @@ function auth(req,res,next){
            }
            catch(err){
               // res.redirect("/login?invalid-token-err");
-              res.send(err.message);
+              res.redirect("/login?"+err.message);
            }
       
       
